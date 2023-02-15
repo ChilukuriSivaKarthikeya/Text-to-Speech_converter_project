@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>Text to speech converter</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+        <style>
+
+          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        *{
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Poppins', sans-serif;
+         }
+         body{ 
+            min-height: 100vh;
+            background-image:url("{% static 'first/ttsbackground.jpg'%}");
+            background-repeat: no-repeat; 
+            background-size: 100% 100%;
+         }
+         nav{
+            background: -webkit-linear-gradient(right, #39f1e2,#abef4a);  
+            height: 50px;
+            width: 100%;
+           position: sticky;
+          }
+label.logo{
+  color:black;
+  font-size: 30px;
+  line-height: 50px;
+  padding: 0 100px;
+  font-weight:bolder;
+}
+nav ul{
+  float: right;
+  margin-right: 30px;
+}
+nav ul li{
+  display: inline-block;
+  line-height: 50px;
+  margin: 0 5px;
+}
+nav ul li a{
+  color:black;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 0px 25px;
+  border-radius: 3px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+        a.active,a:active{
+            background: #d7faf8;
+            padding: 13px 25px;
+            transition: .5s;
+        }
+        .home {
+            display: flex;
+            justify-content: center;
+            min-height: 90vh;
+            align-items: center;
+         }
+        .wrapper form{
+         margin-left: 45%;
+         width: 370px;
+         border:1px solid #999;
+         padding: 25px 30px;
+         border-radius: 7px;
+         background: rgb(252, 252, 252);
+         box-shadow: 7px 7px 20px rgba(0,0,0,0.05);
+       }
+       form .row{
+         display: flex;
+         margin-bottom: 20px;
+         flex-direction: column;
+       }
+       form .row label{
+         font-size: 18px;
+         margin-bottom: 5px;
+       }
+       form .row:nth-child(2) label{
+         font-size: 17px;
+       }
+       form :where(textarea, select, button,input){
+         outline: none;
+         width: 100%;
+         height: 100%;
+         border: none;
+         border-radius: 5px;
+       }
+       form .row textarea,input{
+         resize: none;
+         height: 150px;
+         font-size: 15px;
+         padding: 8px 10px;
+         border: 1px solid #999;
+       }
+       form .row input{
+         resize: none;
+         height: 45px;
+         font-size: 15px;
+         padding: 8px 10px;
+         border: 1px solid #999;
+       }
+       form .row textarea::-webkit-scrollbar{
+         width: 0px;
+       }
+       form .row .outer{
+         height: 47px;
+         display: flex;
+         padding: 0 10px;
+         align-items: center;
+         border-radius: 5px;
+         justify-content: center;
+         border: 1px solid #999;
+       }
+       form .row select{
+          color: #333;
+          outline: none;
+          font-size: 18px;
+          background: none;
+          padding-left: 10px;
+       }
+       form .row select::-webkit-scrollbar{
+         width: 8px;
+       }
+       form .row select::-webkit-scrollbar-track{
+         background: #fff;
+       }
+       form .row select::-webkit-scrollbar-thumb{
+         background: #888;
+         border-radius: 8px;
+         border-right: 2px solid #ffffff;
+       }
+       form button{
+         height: 52px;
+         color: black;
+         font-size: 17px;
+         border:1px solid #999;
+         cursor: pointer;
+         margin-top: 10px;
+         background:-webkit-linear-gradient(right, #08e6ed,#86e206);
+         transition: 0.3s ease;
+       }
+       form button:hover{
+         left: 0;
+         background:-webkit-linear-gradient(right,rgb(40, 188, 251),#84f249);
+       }
+       form button:active{
+        background:-webkit-linear-gradient(left,rgb(239, 245, 42),#fb4e1e);
+       }
+       @media(max-width: 400px){
+         .wrapper{
+           max-width: 345px;
+           width: 100%;
+         }
+       }
+       .textoutput{
+          width:80%;
+          margin:5% 10%;
+          border-radius: 10px; 
+      }
+      .textoutput textarea {
+          width: 100%;
+          height: 400px;
+          padding: 12px 20px;
+          box-sizing: border-box;
+          border-radius: 4px;
+          background-color: #f8f8f8;
+          font-size: 16px;
+          border: 5px solid rgb(31, 4, 4);
+          resize: none; 
+      }
+      .imageoutput{
+          width:80%;
+          margin:5% 10%;
+          border-radius: 10px; 
+      }
+      .imageoutput img{
+          width: 100%;
+          height: 400px;
+          padding: 2px 2px;
+          box-sizing: border-box;
+          border-radius: 4px;
+          background-color: #f8f8f8;
+          border: 5px solid rgb(31, 4, 4);
+          resize: none; 
+      }
+      </style>
+    </head>
+    <body>
+      <nav>
+        <label class="logo">Text to Speech Converter</label>
+        <ul id="my">
+          <li><a class="ele active" onclick="change(1)">TEXT</a></li>
+          <li><a class="ele" onclick="change(2)">FILE</a></li>
+          <li><a class="ele" onclick="change(3)">IMAGE</a></li>
+         </ul>
+        </nav>
+     <div id="page1" class="home">
+     <div class="wrapper">
+     <section id="1">
+      <form id="form1" action="textreader" method="POST"> 
+         {% csrf_token %}
+         <div class="row">
+           <label>Enter Text</label>
+           <textarea name="text" id="textid" required></textarea>
+         </div>
+         <div class="row">
+           <label>Select Language</label>
+           <div class="outer">
+             <select name="languages">
+                <option value="en" selected>English</option>
+                <option value="te">Telugu</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+                <option value="bn">Bengali</option>
+                <option value="mr">Marati</option>
+                <option value="ur">Urdu</option>
+                <option value="kn">Kannada</option>
+                <option value="zh-cn">Chinese</option>
+                <option value="ja">Japanese</option>
+                <option value="es">Spanish</option>
+                <option value="ru">Russian</option>
+             </select>
+           </div>
+         </div>
+         <button onclick="textread()">Convert To Speech</button>
+       </form>
+     </section>
+     <section id="2">
+      <form id="form2" action="filereader" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+         <div class="row">
+          <label>Choose TextFile</label>
+          <input type="file" name="document" id="fileid" accept="text/plain" required>
+         </div>
+         <div class="row">
+          <label>Select Language</label>
+          <div class="outer">
+            <select name="languages">
+              <option value="en" selected>English</option>
+              <option value="te">Telugu</option>
+              <option value="hi">Hindi</option>
+              <option value="ta">Tamil</option>
+              <option value="bn">Bengali</option>
+              <option value="mr">Marati</option>
+              <option value="ur">Urdu</option>
+              <option value="kn">Kannada</option>
+              <option value="zh-cn">Chinese</option>
+              <option value="ja">Japanese</option>
+              <option value="es">Spanish</option>
+              <option value="ru">Russian</option>
+            </select>
+          </div>
+        </div> 
+         <button  onclick="ExtractText();">Convert To Speech</button> 
+       </form>  
+     </section>
+     <section id="3">
+      <form id="form3" action="imagereader" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+         <div class="row">
+           <label>Choose Image</label>
+           <input type="file" name="image" id="image" accept="image/jpg,image/png,image/jpeg" required>
+         </div>
+         <div class="row">
+           <label>Select Language</label>
+           <div class="outer">
+             <select name="languages">
+               <option value="en">English</option>
+               <option value="te">Telugu</option>
+               <option value="hi">Hindi</option>
+               <option value="ta">Tamil</option>
+               <option value="bn">Bengali</option>
+               <option value="mr">Marati</option>
+               <option value="ur">Urdu</option>
+               <option value="kn">Kannada</option>
+               <option value="zh-cn">Chinese</option>
+               <option value="ja">Japanese</option>
+               <option value="es">Spanish</option>
+               <option value="ru">Russian</option>
+             </select>
+            </div>
+         </div> 
+          <button onclick="imageExtract();">Convert To Speech</button>
+      </form>
+     </section>
+   </div>
+  </div>
+  <div id="page2"  class="textoutput" style="display:none;" >
+      <textarea id="outputtext"></textarea> 
+      <!--<form action="filereader" method="POST">
+        {% csrf_token %}
+      <input type="submit" name="pause" value="pause">
+      <input type="submit" name="unpause" value="unpause">
+      <input type="submit" name="stop" value="stop">
+      <button><i class="fa fa-stop" name="stop"></i></button>-->
+    </form>                     
+  </div>
+  <div id="page3" class="imageoutput" style="display:none">
+      <img id='outputimage'> 
+  </div>
+      <script>
+        var btnContainer = document.getElementById("my");
+        var btns = btnContainer.getElementsByClassName("ele");
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function() {
+            var current = document.getElementsByClassName("active");
+            if (current.length > 0) {
+              current[0].className = current[0].className.replace(" active", "");
+            }
+            this.className += " active";
+         });
+        }
+        for(var i=2;i<=3;i++){
+             document.getElementById(i).style.display = "none";
+        }
+         function change(x){
+             for (var i=1;i<=3;i++){
+                 if (x === i){
+                     var y=document.getElementById(i)
+                     if (y.style.display==="none"){
+                     y.style.display = "block";
+                     } 
+                 }
+                 else{
+                     document.getElementById(i).style.display = "none";
+                 }
+             }
+         }
+        function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+        }
+        return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+        
+        function show(shown,hide1,hide2) {
+         document.getElementById(shown).style.display='block';
+         document.getElementById(hide1).style.display='none';
+         document.getElementById(hide2).style.display='none';
+         return flase;
+        }
+        function textread(){
+          if(document.getElementById("textid").value.length==0){
+              alert("Text field is empty")
+          }
+          if(!navigator.onLine){
+              alert("Oops! You are offline");
+            }
+          else
+          {
+            document.getElementById("form1").submit();
+          }
+        }
+        function ExtractText() {
+          if(document.getElementById("fileid").value.length==0){
+              alert("File is not uploaded")
+          }
+          if(!navigator.onLine){
+              alert("Oops! You are offline");
+            }
+          else
+          {
+            document.getElementById("form2").submit();
+            var input = document.getElementById("fileid");
+            var fReader = new FileReader();
+            fReader.onload = function () {
+                document.getElementById('outputtext').innerHTML=fReader.result;    
+            }
+            fReader.readAsText(input.files[0]);
+            show('page2','page3','page1') 
+          }   
+        }
+        function imageExtract(){
+          if(document.getElementById("image").value.length==0){
+              alert("upload image")
+          }
+          if(!navigator.onLine){
+              alert("Oops! You are offline");
+          }
+          else
+          {
+            document.getElementById("form3").submit();
+            var input = document.getElementById("image");
+            var fReader = new FileReader();
+            fReader.readAsDataURL(input.files[0]);
+            fReader.onloadend = function (event) {
+            var dataURL = event.target.result;
+            var output = document.getElementById('outputimage');
+            output.src = dataURL;
+            };
+            show('page3','page2','page1');
+            reader.readAsDataURL(input.files[0]);
+          }
+        }
+       function fileread(){
+        document.getElementById("form4").submit();
+       }
+     </script>
+    </body>
+</html>

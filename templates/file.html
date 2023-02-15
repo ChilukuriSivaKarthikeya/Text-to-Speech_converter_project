@@ -1,0 +1,78 @@
+<html>
+    <style>
+        .contain {
+         background-color: red;
+         display: flex;
+         flex-direction: column;
+       }
+      .sticky{
+         position: fixed;
+       }
+       .content {
+        background-color: yellow;
+        max-height: 200px;
+        overflow-y: scroll;
+       }
+  .footer {
+    background-color: purple;
+  }
+
+    </style>
+<body>
+
+    <div id="page1">
+    <form action="javascript:ExtractText();">
+    <input type="file" id="file-id" name="file_name">
+    <button>read</button>
+    </form>
+    <form action="javascript:imageExtract();">
+    <input type='file' id="image" accept='image/*'/>
+    <button>image</button>
+    </form>
+    </div>
+    <div id="page3" style="display:none">
+    <img id='outputimage' style="height:500px; width:500px;">
+    </div>
+    <div class="container" id="page2" style="display:none">
+        <div class="sticky">file content</div>
+        <p class="content" id="output"></p>
+        <div class="footer">
+          <button>pause</button>
+          <button>stop</button>
+        </div>
+    </div>
+    <script>
+        function show(shown,hide1,hide2) {
+         document.getElementById(shown).style.display='block';
+         document.getElementById(hide1).style.display='none';
+         document.getElementById(hide2).style.display='none';
+         return false;
+        }
+        function ExtractText() {
+            var input = document.getElementById("file-id");
+            var fReader = new FileReader();
+            fReader.onload = function () {
+                document.getElementById('output').innerHTML=fReader.result;    
+            }
+            fReader.readAsText(input.files[0]);
+            show('page2','page3','page1')
+            
+        }
+        function imageExtract(){
+            var input = document.getElementById("image");
+            var fReader = new FileReader();
+            fReader.readAsDataURL(input.files[0]);
+            fReader.onloadend = function (event) {
+            var dataURL = event.target.result;
+            var output = document.getElementById('outputimage');
+            output.src = dataURL;
+            };
+            show('page3','page2','page1');
+        reader.readAsDataURL(input.files[0]);
+       };
+    </script>
+</body>
+
+</html>
+
+

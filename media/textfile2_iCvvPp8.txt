@@ -1,0 +1,2 @@
+text to speech converter is web based application that can read text,regardless of whether the input enter text,textfile or 
+text image that converted into required language.

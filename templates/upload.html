@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        *{
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Poppins', sans-serif;
+         }
+         body{ 
+            background-image: url("/static/backgroundimage.jpeg");
+            background-repeat: no-repeat; 
+            background-size: cover;
+         }
+         .home{
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            align-items: center;
+         }
+         ::selection{
+         color: #fff;
+         background: #5256AD;
+       }
+       .form1,.form2,.form3{
+        position: relative;
+         top:70px;
+         width: 370px;
+         padding: 25px 30px;
+         border-radius: 7px;
+         background: #fff;
+         box-shadow: 7px 7px 20px rgba(0,0,0,0.05);
+       }
+       .wrapper header{
+         font-size: 28px;
+         font-weight: 500;
+         text-align: center;
+       }
+       .wrapper form{
+         margin: 35px 0 20px;
+       }
+       .btn{
+         outline: none;
+         position: absolute;
+         top: 50px;
+         right: 40%;
+         width: 300px;
+         height: 100px;
+       }
+       .btn button{
+         border:2px;
+         padding:10px;
+         border-radius: 5px;
+       }
+       form .row{
+         display: flex;
+         margin-bottom: 20px;
+         flex-direction: column;
+       }
+       form .row label{
+         font-size: 18px;
+         margin-bottom: 5px;
+       }
+       form .row:nth-child(2) label{
+         font-size: 17px;
+       }
+       form :where(textarea, select, button,input){
+         outline: none;
+         width: 100%;
+         height: 100%;
+         border: none;
+         border-radius: 5px;
+       }
+       form .row textarea,input{
+         resize: none;
+         height: 110px;
+         font-size: 15px;
+         padding: 8px 10px;
+         border: 1px solid #999;
+       }
+       form .row input{
+         resize: none;
+         height: 45px;
+         font-size: 15px;
+         padding: 8px 10px;
+         border: 1px solid #999;
+       }
+       form .row textarea::-webkit-scrollbar{
+         width: 0px;
+       }
+       form .row .outer{
+         height: 47px;
+         display: flex;
+         padding: 0 10px;
+         align-items: center;
+         border-radius: 5px;
+         justify-content: center;
+         border: 1px solid #999;
+       }
+       form .row select{
+         font-size: 14px;
+         background: none;
+       }
+       form .row select::-webkit-scrollbar{
+         width: 8px;
+       }
+       form .row select::-webkit-scrollbar-track{
+         background: #fff;
+       }
+       form .row select::-webkit-scrollbar-thumb{
+         background: #888;
+         border-radius: 8px;
+         border-right: 2px solid #ffffff;
+       }
+       form button{
+         height: 52px;
+         color: #fff;
+         font-size: 17px;
+         cursor: pointer;
+         margin-top: 10px;
+         background:-webkit-linear-gradient(right, #a445b2, #fa4299);
+         transition: 0.3s ease;
+       }
+       form button:hover{
+         left: 0;
+       }
+  
+       @media(max-width: 400px){
+         .wrapper{
+           max-width: 345px;
+           width: 100%;
+         }
+       }
+      .textoutput{
+          width:80%;
+          margin:5% 10%;
+          border-radius: 10px; 
+      }
+      .imageoutput{
+          margin-top: 5%;
+          margin-left: 30%  ;
+          margin-right: 25%  ; 
+          box-sizing: border-box;
+          border:5px solid red;
+      }
+           .textoutput textarea {
+             width: 100%;
+             height: 500px;
+             padding: 12px 20px;
+             box-sizing: border-box;
+             border: 2px solid #ccc;
+             border-radius: 4px;
+             background-color: #f8f8f8;
+             font-size: 16px;
+             border: 5px solid red;
+             resize: none; 
+            }
+           #btns{
+            border-radius: 10px;
+            padding:7px;
+           }
+
+           #btns:hover{
+               background-color: aquamarine;
+           }
+        </style>
+    </head>
+    <body>
+    <div id="page1" class="home">
+      <div class="btn">
+        <h1>Text to speech</h1>
+         <button  onclick="change(1)">TEXT</button>
+         <button  onclick="change(2)">FILE</button>
+         <button  onclick="change(3)">IMAGE</button>
+     </div>
+     <div class="wrapper">
+     <section id="1">
+      <form class="form1" action="textreader" method="POST"> 
+         {% csrf_token %}
+         
+         <div class="row">
+           <label>Enter Text</label>
+           <textarea name="text"></textarea>
+         </div>
+         <div class="row">
+           <label>Select Language</label>
+           <div class="outer">
+             <select name="languages">
+                <option value="en">English</option>
+                <option value="te">Telugu</option>
+                <option value="hi">Hindi</option>
+                <option value="ta">Tamil</option>
+             </select>
+           </div>
+         </div>
+         <button>Convert To Speech</button>
+       </form>
+     </section>
+     <section id="2">
+      <form class="form2" id="form2" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+         <div class="row">
+          <label>Choose TextFile</label>
+          <input type="file" name="document" id="fileid" accept="file/txt" required>
+         </div>
+         <div class="row">
+          <label>Select Language</label>
+          <div class="outer">
+            <select name="languages">
+              <option value="en">English</option>
+              <option value="te">Telugu</option>
+              <option value="hi">Hindi</option>
+              <option value="ta">Tamil</option>
+            </select>
+          </div>
+        </div> 
+         <button  onclick="ExtractText();">Convert To Speech</button> 
+       </form>  
+     </section>
+     <section id="3">
+      <form class="form3" id="form3" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+         <div class="row">
+           <label>Choose Image</label>
+           <input type="file" name="image" id="image" accept="image/jpg,image/png,image/jpeg" required>
+         </div>
+         <div class="row">
+           <label>Select Language</label>
+           <div class="outer">
+             <select name="languages">
+               <option value="en">English</option>
+               <option value="te">Telugu</option>
+               <option value="hi">Hindi</option>
+               <option value="ta">Tamil</option>
+             </select>
+           </div>
+         </div> 
+          <button onclick="imageExtract();">Convert To Speech</button>
+      </form>
+     </section>
+   </div>
+  </div>
+  <div class="subpage">
+  <div id="page2"  class="textoutput" style="display:none;" >
+      <textarea id="outputtext"></textarea>                               
+  </div>
+  <div id="page3" class="imageoutput" style="display:none">
+      <img id='outputimage' style="height:500px; width:500px;"> 
+  </div>
+</div>
+      <script>
+         for(var i=1;i<=3;i++){
+             document.getElementById(i).style.display = "none";
+         }
+         function change(x){
+             for (var i=1;i<=3;i++){
+                 if (x == i){
+                     var y=document.getElementById(i)
+                     if (y.style.display==="none"){
+                     y.style.display = "block";
+                     }
+                     else{
+                      y.style.display = "none"
+                     }
+                 }else{
+                     document.getElementById(i).style.display = "none";
+                 }
+             }
+         }
+        function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+        }
+        return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+        
+        function show(shown,hide1,hide2) {
+         document.getElementById(shown).style.display='block';
+         document.getElementById(hide1).style.display='none';
+         document.getElementById(hide2).style.display='none';
+         return flase;
+        }
+        function ExtractText() {
+            //document.getElementById("form2").submit();
+            var input = document.getElementById("fileid");
+            var fReader = new FileReader();
+            fReader.onload = function () {
+                document.getElementById('outputtext').innerHTML=fReader.result;    
+            }
+            fReader.readAsText(input.files[0]);
+            show('page2','page3','page1')    
+        }
+        function imageExtract(){
+            //document.getElementById("form3").submit();
+            var input = document.getElementById("image");
+            var fReader = new FileReader();
+            fReader.readAsDataURL(input.files[0]);
+            fReader.onloadend = function (event) {
+            var dataURL = event.target.result;
+            var output = document.getElementById('outputimage');
+            output.src = dataURL;
+            };
+            show('page3','page2','page1');
+        reader.readAsDataURL(input.files[0]);
+       };
+     </script>
+    </body>
+</html>
