@@ -1,3 +1,0 @@
-Text to speech (TTS) is the use of software to create an audio output in the form of spoken voice. The program that is used by programs to change text on the page to an audio output of the spoken voice is normally a text to speech engine. 
-Most of the information in world of computer is accessible to a few who can read or understand a particular language. But it could be very much helpful for the common man if the computer talks to him in his language.
-

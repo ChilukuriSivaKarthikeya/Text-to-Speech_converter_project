@@ -11,24 +11,25 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+from decouple import config
+#from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR/'.env')
+#load_dotenv(BASE_DIR/'.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-^n&9f$q0*7y6w$1^n1rr6fzo^$qoqx*3$h0=*-y8($ahd7&*s-'
-SECRET_KEY =os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-^n&9f$q0*7y6w$1^n1rr6fzo^$qoqx*3$h0=*-y8($ahd7&*s-'
+#SECRET_KEY =os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = os.getenv('DEBUG','0').lower() in ['true','t','1']
+DEBUG = True
+#DEBUG = os.getenv('DEBUG','0').lower() in ['true','t','1']
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(' ')
+ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS")
 
 
 # Application definition
@@ -120,10 +121,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+AWS_STORAGE_BUCKET_NAME = 'texttospeechconvertor'
+AWS_S3_REGION_NAME = 'us-east-2'  # e.g. us-east-2
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY =config('AWS_SECRET_ACCESS_KEY') 
+
+AWS_S3_CUSTOM_DOMAIN = 'texttospeechconvertor.s3.us-east-2.amazonaws.com/static'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+STATIC_URL = AWS_S3_CUSTOM_DOMAIN+"/static/"
 STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
+
+MEDIA_URL='texttospeechconvertor.s3.us-east-2.amazonaws.com/media'+"/media/"
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
-MEDIA_URL="/media/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
