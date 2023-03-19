@@ -3,11 +3,12 @@ from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
 from googletrans import Translator
 from gtts import gTTS
+import os
+os.environ['SDL_AUDIODRIVER'] = 'dsp'
 import pygame
 from io import BytesIO
 import pytesseract
 from PIL import Image
-import os
 
 def home(request):
     return render(request,'tts.html')
