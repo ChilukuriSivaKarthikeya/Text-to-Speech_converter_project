@@ -21,7 +21,15 @@ A multilingual web application that converts text into spoken voice using variou
 
 ## 📦 Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/ChilukuriSivaKarthikeya/Text-to-speech-convertor-project.git
-   cd Text-to-speech-convertor-project
+```bash
+# Clone the repository
+git clone https://github.com/ChilukuriSivaKarthikeya/Text-to-speech-convertor-project.git
+
+# Navigate into the project directory
+cd Text-to-speech-convertor-project
+
+# Install dependencies (make sure virtualenv is activated)
+pip install -r requirements.txt
+
+# Start the server
+python manage.py runserver
